@@ -121,7 +121,7 @@ class Module2(tf.keras.layers.Layer):
 
     def __init__(self):
         super(Module2, self).__init__()
-        self.conv2d_b0 = BasicConv2D(filters=32,
+        self.conv2d_b0 = BasicConv2D(filters=384,
                                      kernel=(3, 3),
                                      strides=2,
                                      padding='valid')
