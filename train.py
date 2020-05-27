@@ -5,6 +5,7 @@ from data_loader import build_dataset
 import config
 import datetime
 import math
+from matplotlib import pyplot as plt
 
 gpus = tf.config.experimental.list_physical_devices('GPU')
 if gpus:
@@ -67,6 +68,10 @@ def valid_step(images, labels):
 
 
 def main():
+    train_loss_history = []
+    train_acc_history = []
+    valid_loss_history = []
+    valid_acc_history = []
     for epoch in range(config.epochs):
         train_loss.reset_states()
         train_acc.reset_states()
@@ -102,6 +107,27 @@ def main():
             tf.summary.scalar('valid acc', valid_acc.result(), step=epoch)
 
         checkpoint_manager.save()
+
+        train_acc_history.append(train_acc.result())
+        train_loss_history.append(train_loss.result())
+        valid_acc_history.append(valid_acc.result())
+        valid_loss_history.append(valid_loss.result())
+
+    plt.plot(train_acc_history)
+    plt.plot(valid_acc_history)
+    plt.title('Model accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'validation'], loc='upper left')
+    plt.show()
+
+    plt.plot(train_loss_history)
+    plt.plot(valid_loss_history)
+    plt.title('Model loss')
+    plt.ylabel('loss')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'validation'], loc='upper left')
+    plt.show()
 
 
 if __name__ == '__main__':
